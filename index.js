@@ -1,3 +1,6 @@
+// used MVC pattern to manipulate data, user interface
+
+// data storage and manipulate, allow two users to compete
 var model = {
   boardSize: 8,
   numShips: 3,
@@ -8,6 +11,7 @@ var model = {
   playerOne: null,
   playerTwo: null,
 
+  // to create two player objects
   initialPlayers: function() {
     this.playerOne = {
       ships: [
@@ -32,6 +36,7 @@ var model = {
     };
   },
 
+  // to get players' data
   getPlayerData: function(player, data) {
     switch (data) {
       case "shipsAlive":
@@ -43,6 +48,7 @@ var model = {
     }
   },
 
+  // when user click on cell and trigger this function
   fire: function(guess, player) {
     this.playerOneTurn = player == this.playerOne ? false : true;
     for (var i = 0; i < this.numShips; i++) {
@@ -71,6 +77,7 @@ var model = {
     view.render();
   },
 
+  // determine whether current ship is sunk
   isSunk: function(ship) {
     for (var i = 0; i < this.shipLength; i++) {
       if (ship.hits[i] !== "hit") {
@@ -80,6 +87,7 @@ var model = {
     return true;
   },
 
+  // get ships location and handle collison if locations duplicated
   generateShipLocations: function(player) {
     var locations;
     for (var i = 0; i < this.numShips; i++) {
@@ -90,6 +98,7 @@ var model = {
     }
   },
 
+  // push ships location to players' data
   generateShip: function(player) {
     var direction = Math.floor(Math.random() * 2);
     var row, col;
@@ -117,6 +126,7 @@ var model = {
     return newShipLocations;
   },
 
+  // check the whether the location is occupied by player
   collision: function(locations, player) {
     for (var i = 0; i < this.numShips; i++) {
       var ship = player.ships[i];
@@ -129,13 +139,16 @@ var model = {
     return false;
   },
 
+  // reset the game
   reset: function() {
     this.initialPlayers();
     controller.init();
   }
 };
 
+// controller to hanlder user interaction and manipulate data
 var controller = {
+  // create player table
   userTableCreate: function(playerMap, playerId, player) {
     var rows = 8;
     var cols = 8;
@@ -163,11 +176,13 @@ var controller = {
     model.generateShipLocations(player);
   },
 
+  // create two players' table
   createTables: function() {
     this.userTableCreate("playerOne-map", "p2", model.playerOne);
     this.userTableCreate("playerTwo-map", "p1", model.playerTwo);
   },
 
+  // process when player click table cell
   processGuess: function() {
     if (model.freeze) {
       view.windowAlert("Game is over. Please start a NEW GAME");
@@ -198,12 +213,14 @@ var controller = {
     }
   },
 
+  // when page loads initial the game
   init() {
     model.initialPlayers();
     this.createTables();
     view.render();
   },
 
+  // start a new game
   startNew: function() {
     model.startNewGame = true;
     model.freeze = false;
@@ -211,7 +228,9 @@ var controller = {
   }
 };
 
+// view handles display
 var view = {
+  // display live cast message
   displayMessage: function(player, msg) {
     if (player == model.playerOne) {
       if (msg == "already hit") {
@@ -242,20 +261,24 @@ var view = {
     messageArea.innerHTML = msg;
   },
 
+  // display when player hits ship
   displayHit: function(location) {
     var cell = document.getElementById(location);
     cell.setAttribute("class", "hit");
   },
 
+  // display when player misses a fire
   displayMiss: function(location) {
     var cell = document.getElementById(location);
     cell.setAttribute("class", "miss");
   },
 
+  // window alert message
   windowAlert: function(msg) {
     window.alert(msg);
   },
 
+  // render the page
   render: function() {
     let p1_ship_alive = document.getElementById("p1-ship-alive");
     let p1_ship_hit = document.getElementById("p1-ship-hit");
@@ -284,8 +307,8 @@ var view = {
   }
 };
 
+// when page loads, initial the game
 window.onload = init;
-
 function init() {
   controller.init();
 }
