@@ -5,6 +5,7 @@ var model = {
   playerOneTurn: true,
   startNewGame: false,
   freeze: true,
+
   playerOne: {
     ships: [
       { locations: [0, 0, 0], hits: ["", "", ""] },
@@ -35,14 +36,6 @@ var model = {
         return player.shipsHit;
       case "shipsSunk":
         return player.shipsSunk;
-    }
-  },
-
-  userTurnConflict: function(player) {
-    if (this.playerOneTurn && player == this.playerTwo) {
-      window.alert("It is Player One's turn!");
-    } else if (!this.playerOneTurn && player == this.playerOne) {
-      window.alert("It is Player Two's turn!");
     }
   },
 
@@ -145,7 +138,7 @@ var model = {
       shipsAlive: 3
     };
 
-    playerTwo = {
+    this.playerTwo = {
       ships: [
         { locations: [0, 0, 0], hits: ["", "", ""] },
         { locations: [0, 0, 0], hits: ["", "", ""] },
@@ -165,7 +158,6 @@ var controller = {
     var cols = 8;
     var table = document.getElementById(playerMap);
     table.innerHTML = "";
-    console.log(playerMap);
     table.style.marginBottom = "50px";
     for (var r = 0; r < rows; r++) {
       var row = table.insertRow(-1);
@@ -226,6 +218,12 @@ var controller = {
   init() {
     this.createTables();
     view.render();
+  },
+
+  startNew: function() {
+    model.startNewGame = true;
+    model.freeze = false;
+    model.reset();
   }
 };
 
@@ -287,7 +285,7 @@ var view = {
     var start_new = document.getElementById("start-new");
     player_turn.innerHTML = "";
     start_new.style.display = model.startNewGame ? "NONE" : "inline-block";
-    start_new.onclick = view.startNew;
+    start_new.onclick = controller.startNew;
     if (model.startNewGame) {
       player_turn.innerHTML = model.playerOneTurn
         ? "Player One's Turn to attack Player Two's Territory"
@@ -299,38 +297,6 @@ var view = {
     p2_ship_alive.innerHTML = model.getPlayerData(p1, "shipsAlive");
     p2_ship_hit.innerHTML = model.getPlayerData(p1, "shipsHit");
     p2_ship_sunk.innerHTML = model.getPlayerData(p1, "shipsSunk");
-  },
-
-  startNew: function() {
-    model.startNewGame = true;
-    model.freeze = false;
-    view.reset();
-  },
-
-  reset: function() {
-    model.playerOneTurn = true;
-    model.playerOne = {
-      ships: [
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] }
-      ],
-      shipsSunk: 0,
-      shipsHit: 0,
-      shipsAlive: 3
-    };
-
-    model.playerTwo = {
-      ships: [
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] }
-      ],
-      shipsSunk: 0,
-      shipsHit: 0,
-      shipsAlive: 3
-    };
-    controller.init();
   }
 };
 
