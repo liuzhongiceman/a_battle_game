@@ -181,7 +181,9 @@ var controller = {
 
     for (var i = 0; i < table.rows.length; i++) {
       for (var j = 0; j < table.rows[i].cells.length; j++)
-        table.rows[i].cells[j].onclick = model.freeze ? null : processGuess;
+        table.rows[i].cells[j].onclick = model.freeze
+          ? null
+          : controller.processGuess;
     }
     model.generateShipLocations(player);
   },
@@ -189,6 +191,36 @@ var controller = {
   createTables: function() {
     this.userTableCreate("playerOne-map", "p2", model.playerOne);
     this.userTableCreate("playerTwo-map", "p1", model.playerTwo);
+  },
+
+  processGuess: function() {
+    if (model.freeze) {
+      view.windowAlert("Game is over. Please start a NEW GAME");
+      return;
+    }
+    var location = this.id;
+    var playerId = location.substring(0, 2);
+    player = playerId == "p1" ? model.playerOne : model.playerTwo;
+    if (model.playerOneTurn && player == model.playerTwo) {
+      view.windowAlert(
+        "It is Player One's turn to attack Player Two's Territorial Waters!"
+      );
+      return;
+    } else if (!model.playerOneTurn && player == model.playerOne) {
+      view.windowAlert(
+        "It is Player Two's turn! to attack Player Two's Territorial Waters"
+      );
+      return;
+    }
+    if (location) {
+      model.fire(location, player);
+      if (player.shipsSunk === model.numShips) {
+        view.displayMessage(player, "won");
+        model.startNewGame = false;
+        model.freeze = true;
+        view.render();
+      }
+    }
   },
 
   init() {
@@ -227,13 +259,19 @@ var view = {
     var messageArea = document.getElementById("display-msg");
     messageArea.innerHTML = msg;
   },
+
   displayHit: function(location) {
     var cell = document.getElementById(location);
     cell.setAttribute("class", "hit");
   },
+
   displayMiss: function(location) {
     var cell = document.getElementById(location);
     cell.setAttribute("class", "miss");
+  },
+
+  windowAlert: function(msg) {
+    window.alert(msg);
   },
 
   render: function() {
@@ -249,7 +287,7 @@ var view = {
     var start_new = document.getElementById("start-new");
     player_turn.innerHTML = "";
     start_new.style.display = model.startNewGame ? "NONE" : "inline-block";
-    start_new.onclick = view.start;
+    start_new.onclick = view.startNew;
     if (model.startNewGame) {
       player_turn.innerHTML = model.playerOneTurn
         ? "Player One's Turn to attack Player Two's Territory"
@@ -263,7 +301,7 @@ var view = {
     p2_ship_sunk.innerHTML = model.getPlayerData(p1, "shipsSunk");
   },
 
-  start: function() {
+  startNew: function() {
     model.startNewGame = true;
     model.freeze = false;
     view.reset();
@@ -300,35 +338,4 @@ window.onload = init;
 
 function init() {
   controller.init();
-}
-
-function processGuess() {
-  if (model.freeze) {
-    window.alert("Game is over. Please start a NEW GAME");
-    return;
-  }
-  var location = this.id;
-  var playerId = location.substring(0, 2);
-  player = playerId == "p1" ? model.playerOne : model.playerTwo;
-  if (model.playerOneTurn && player == model.playerTwo) {
-    window.alert(
-      "It is Player One's turn to attack Player Two's Territorial Waters!"
-    );
-    return;
-  } else if (!model.playerOneTurn && player == model.playerOne) {
-    window.alert(
-      "It is Player Two's turn! to attack Player Two's Territorial Waters"
-    );
-    return;
-  }
-  console.log("hi there location: " + location);
-  if (location) {
-    model.fire(location, player);
-    if (player.shipsSunk === model.numShips) {
-      view.displayMessage(player, "won");
-      model.startNewGame = false;
-      model.freeze = true;
-      view.render();
-    }
-  }
 }
