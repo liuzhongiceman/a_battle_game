@@ -1,0 +1,63 @@
+<html>
+<head>
+    <title>BattleShip</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <a href="#default">
+            <span>
+                <img class="logo" src="assets/images/logo.png" />
+            </span>
+        </a>
+        <div class="header-right">
+            <a class="active">Battle With Your Friends</a>
+        </div>
+    </div>
+    <!-- Map and stats Section -->
+    <div class="wrapper">
+        <div class="live-cast">
+            <h2><span id="player-turn"> </span></h2>
+            <h3>
+                <span>
+                    <img class="live-cast-logo" src="assets/images/live-streaming.png"/>
+                </span>
+                <span id="display-msg"></span>
+            </h3>
+            <button id="start-new">Start A NEW GAME</button>
+        </div>
+        <div class="player-map">
+            <table id="playerOne-map"></table>
+            <h3>Player One's Territorial Waters</h3>
+            <ul>
+                <li class="ships-alive">ships alive: <span id="p1-ship-alive"></span></li>
+                <li class="ships-hit"> ships hit: <span id="p1-ship-hit"></span></li>
+                <li class="ships-sunk">ships sunk: <span id="p1-ship-sunk"></span></li>
+            </ul>
+        </div>
+        <div class="player-map">
+            <table id="playerTwo-map"></table>
+            <h3>Player Two's Territorial Waters</h3>
+            <ul>
+                <li class="ships-alive">ships alive: <span id="p2-ship-alive"></span></li>
+                <li class="ships-hit"> ships hit: <span id="p2-ship-hit"></span></li>
+                <li class="ships-sunk">ships sunk: <span id="p2-ship-sunk"></span></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>Designed By Zhong Liu</p>
+        <p>NorthEastern University San Jose Campus</p>
+        <p>Source Code
+            <a target="_blank" href="https://github.com/liuzhongiceman">
+                <img class="github" src="assets/images/github.png"/>
+            </a>
+        </p>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
