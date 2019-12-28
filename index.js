@@ -5,27 +5,31 @@ var model = {
   playerOneTurn: true,
   startNewGame: false,
   freeze: true,
+  playerOne: null,
+  playerTwo: null,
 
-  playerOne: {
-    ships: [
-      { locations: [0, 0, 0], hits: ["", "", ""] },
-      { locations: [0, 0, 0], hits: ["", "", ""] },
-      { locations: [0, 0, 0], hits: ["", "", ""] }
-    ],
-    shipsSunk: 0,
-    shipsHit: 0,
-    shipsAlive: 3
-  },
+  initialPlayers: function() {
+    this.playerOne = {
+      ships: [
+        { locations: [0, 0, 0], hits: ["", "", ""] },
+        { locations: [0, 0, 0], hits: ["", "", ""] },
+        { locations: [0, 0, 0], hits: ["", "", ""] }
+      ],
+      shipsSunk: 0,
+      shipsHit: 0,
+      shipsAlive: 3
+    };
 
-  playerTwo: {
-    ships: [
-      { locations: [0, 0, 0], hits: ["", "", ""] },
-      { locations: [0, 0, 0], hits: ["", "", ""] },
-      { locations: [0, 0, 0], hits: ["", "", ""] }
-    ],
-    shipsSunk: 0,
-    shipsHit: 0,
-    shipsAlive: 3
+    this.playerTwo = {
+      ships: [
+        { locations: [0, 0, 0], hits: ["", "", ""] },
+        { locations: [0, 0, 0], hits: ["", "", ""] },
+        { locations: [0, 0, 0], hits: ["", "", ""] }
+      ],
+      shipsSunk: 0,
+      shipsHit: 0,
+      shipsAlive: 3
+    };
   },
 
   getPlayerData: function(player, data) {
@@ -126,28 +130,7 @@ var model = {
   },
 
   reset: function() {
-    this.playerOneTurn = true;
-    this.playerOne = {
-      ships: [
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] }
-      ],
-      shipsSunk: 0,
-      shipsHit: 0,
-      shipsAlive: 3
-    };
-
-    this.playerTwo = {
-      ships: [
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] },
-        { locations: [0, 0, 0], hits: ["", "", ""] }
-      ],
-      shipsSunk: 0,
-      shipsHit: 0,
-      shipsAlive: 3
-    };
+    this.initialPlayers();
     controller.init();
   }
 };
@@ -216,6 +199,7 @@ var controller = {
   },
 
   init() {
+    model.initialPlayers();
     this.createTables();
     view.render();
   },
